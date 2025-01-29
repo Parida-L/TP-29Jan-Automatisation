@@ -8,7 +8,7 @@ J'ai décidé de séparer les features par catégories.  Les différents scénar
 
 Features et Scénarios
 
-1. Feature: Elements Page -> API calls, radio button, dynamic properties 
+1. Feature: Elements Page -> API calls ✅, radio button ✅, dynamic properties ✅
    
 ```Gherkin
 Feature: DemoQA Elements Page
@@ -32,7 +32,7 @@ Feature: DemoQA Elements Page
       Then the text color of the color change button changes
 ```
 
-2. Feature: Form Page
+2. Feature: Form Page ✅
 ```Gherkin
 Feature: DemoQA Forms Page
 	As a user of DemoQA website
