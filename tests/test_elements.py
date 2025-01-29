@@ -35,59 +35,53 @@ def i_am_on_the_links_elements_page(browser):
 
 @when('I test all API calls links')
 def i_test_all_the_api_calls_links(browser):
-    #CREATED
-    browser.find_element(By.XPATH, '//a[.="Created"]').click()
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 201 and status text Created', "Link response does not match"
-    time.sleep(2)
-    # #NO CONTENT
-    browser.find_element(By.XPATH, '//*[@id="no-content"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 204 and status text No Content', "Link response does not match"
-    #MOVED
-    browser.find_element(By.XPATH, '//*[@id="moved"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 301 and status text Moved Permanently', "Link response does not match"
-    #BAD REQUEST
-    browser.find_element(By.XPATH, '//*[@id="bad-request"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 400 and status text Bad Request', "Link response does not match"
-    #UNAUTHORIZED
-    browser.find_element(By.XPATH, '//*[@id="unauthorized"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 401 and status text Unauthorized', "Link response does not match"
-    #FORBIDDEN
-    browser.find_element(By.XPATH, '//*[@id="forbidden"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 403 and status text Forbidden', "Link response does not match"
-    #NOT FOUND
-    browser.find_element(By.XPATH, '//*[@id="invalid-url"]').click()
-    time.sleep(2)
-    linkResponse = WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
-        message="Link response is not displayed"
-    )
-    assert linkResponse.text == 'Link has responded with staus 404 and status text Not Found', "Link response does not match"
+        # Refactorisation as all api links have same structure as below : 
+        # browser.find_element(By.XPATH, '//*[@id="created"]').click()
+        # linkResponse = WebDriverWait(browser, 10).until(
+        #     EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
+        #     message="Link response is not displayed"
+        # )
+        # assert linkResponse.text == 'Link has responded with staus 201 and status text Created', "Link response does not match"
+        # time.sleep(2)
+
+        # Dictionary to store responses for validation (and use after for the THEN)
+        global link_responses  
+        link_responses = {}
+
+        # Dictionary of link IDs and expected responses
+        links_to_test = {
+            "created": "Link has responded with staus 201 and status text Created",
+            "no-content": "Link has responded with staus 204 and status text No Content",
+            "moved": "Link has responded with staus 301 and status text Moved Permanently",
+            "bad-request": "Link has responded with staus 400 and status text Bad Request",
+            "unauthorized": "Link has responded with staus 401 and status text Unauthorized",
+            "forbidden": "Link has responded with staus 403 and status text Forbidden",
+            "invalid-url": "Link has responded with staus 404 and status text Not Found",
+        }
+
+        # Loop through each link, click it, and store the response
+        for link_id, expected_text in links_to_test.items():
+            browser.find_element(By.XPATH, f'//*[@id="{link_id}"]').click()
+            time.sleep(2)  # Replace with explicit wait if necessary
+            response_element = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
+                message=f"Response for {link_id} is not displayed"
+            )
+            link_responses[link_id] = response_element.text  # Store response for validation
+
+@then('I should receive the corresponding status code')
+def i_should_receive_the_corresponding_status_code():
+    # Dictionary of expected responses
+    expected_responses = {
+        "created": "Link has responded with staus 201 and status text Created",
+        "no-content": "Link has responded with staus 204 and status text No Content",
+        "moved": "Link has responded with staus 301 and status text Moved Permanently",
+        "bad-request": "Link has responded with staus 400 and status text Bad Request",
+        "unauthorized": "Link has responded with staus 401 and status text Unauthorized",
+        "forbidden": "Link has responded with staus 403 and status text Forbidden",
+        "invalid-url": "Link has responded with staus 404 and status text Not Found",
+    }
+
+    # Validate the responses
+    for link_id, expected_text in expected_responses.items():
+        assert link_responses[link_id] == expected_text, f"Mismatch for {link_id}: {link_responses[link_id]}"
