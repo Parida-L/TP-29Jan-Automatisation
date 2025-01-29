@@ -14,7 +14,12 @@ Select one > Another
 Old Style menu >  Aqua
 Drop down > toutes les couleurs 
 Multi select > Audi
- 
+
+Choisir dans "Select Value" : Another root option.
+Dans "Select One" : Other.
+Dans "Old Style Select Menu" : Aqua.
+Dans "Multi Select Drop Down" : Green, Blue, Red et Black
+Dans "Standard multi select": Audi
  
 Elements >
  

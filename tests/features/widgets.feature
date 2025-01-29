@@ -8,10 +8,11 @@ Feature: DemoQA Widgets Page
     When I hover over the Tool Tips
     Then I should see the corresponding Tool Tips message
 
-  Scenario: Verify Select menu
-    Given I navigate to the select menu widget 
-    # When I select "Option 1" in the "Select value" dropdown
-    # And I select "Option 2" in the "Select one" dropdown
-    # And I select "Option 3" in "Old Style Select Menu" dropdown
-    # And I select "Option 4" and "Option 5" in "Multi Select Drop Down" dropdown
+  Scenario: Test Select Menu on the Widgets Page
+    Given I navigate to the select menu widget
+    When I select "Option 1" in the "Select value" dropdown
+    And I select "Option 2" in the "Select one" dropdown
+    And I select "Option 3" in "Old Style Select Menu" dropdown
+    And I select all options in "Multi Select Drop Down" dropdown
+    # And I select "Option 4" in "Standard multi select"
     # Then the selected values should be displayed
