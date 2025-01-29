@@ -14,7 +14,7 @@ def browser():
     yield driver
     driver.quit()
 
-#Scenario 1 : 
+#SCENARIO 1 : API CALLS LINKS TEST
 @scenario('features/elements.feature', 'Test all API calls links')
 def test_all_api_calls_links():
     pass
@@ -62,7 +62,7 @@ def i_test_all_the_api_calls_links(browser):
         # Loop through each link, click it, and store the response
         for link_id, expected_text in links_to_test.items():
             browser.find_element(By.XPATH, f'//*[@id="{link_id}"]').click()
-            time.sleep(2)  # Replace with explicit wait if necessary
+            time.sleep(1)  # Replace with explicit wait if necessary
             response_element = WebDriverWait(browser, 10).until(
                 EC.presence_of_element_located((By.XPATH, '//*[@id="linkResponse"]')),
                 message=f"Response for {link_id} is not displayed"
@@ -85,3 +85,86 @@ def i_should_receive_the_corresponding_status_code():
     # Validate the responses
     for link_id, expected_text in expected_responses.items():
         assert link_responses[link_id] == expected_text, f"Mismatch for {link_id}: {link_responses[link_id]}"
+
+#SCENARIO 2 : RADIO BUTTONS TEST
+@scenario('features/elements.feature', 'Test The Radio Button')
+def test_the_radio_button():
+    pass
+
+@given('I am on the Radio Button Elements page')
+def i_am_on_the_radio_button_elements_page(browser):
+    #Navigate to the demoqa.com/radio-button page
+    browser.get('https://demoqa.com/radio-button')
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "/html/body")),
+        message="DemoQA website is not accessible"
+    )
+    #Verify the page title
+    assert browser.title == "DEMOQA"
+    element = browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/div[1]')
+    browser.execute_script("arguments[0].scrollIntoView();", element)
+    assert element.text == 'Do you like the site?', "Question does not match"
+    assert browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div[2]/h1').text == 'Radio Button', "Header does not match"
+
+@when('I select each Radio Button')
+def i_select_each_radio_button(browser):
+    #Click on YES
+    radio_button_yes = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//label[@for="yesRadio"]'))
+    )
+    radio_button_yes.click()
+    time.sleep(1)
+    response_element = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/p')),
+                message=f"Response for YES is not displayed"
+            )
+    assert response_element.text.startswith('You have selected'), f"Unexpected response: {response_element.text}"
+    
+    #Click on Impressive
+    radio_button_imp = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//label[@for="impressiveRadio"]'))
+    )
+    radio_button_imp.click()
+    time.sleep(1)
+    response_element = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/p')),
+                message=f"Response for Impressive is not displayed"
+            )
+    assert response_element.text.startswith('You have selected'), f"Unexpected response: {response_element.text}"
+
+    #No button should not be clickable
+    # Verify the element is present 
+    radio_button_no = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//label[@for="noRadio"]')),
+        message="No radio button label is not found"
+    )
+
+    # Try clicking and catch the error (element should not be clickable)
+    try:
+        radio_button_no.click()
+        assert False, "No radio button should not be clickable, but it was clicked"
+    except:
+        pass  # Expected behavior, no need to handle further
+
+@then('I should see the corresponding message except for No')
+def i_should_see_the_corresponding_message_except_for_no(browser):
+    # Verify the message for Yes radio button
+    browser.find_element(By.XPATH, '//label[@for="yesRadio"]').click()
+    #Verify the response is correct by checking the text
+    response_element_yes = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/p')),
+                message=f"Response for YES is not displayed"
+            )
+    assert response_element_yes.text == 'You have selected Yes', f"Unexpected response: {response_element_yes.text}"
+    # Verify the message for Impressive radio button
+    browser.find_element(By.XPATH, '//label[@for="impressiveRadio"]').click()
+    #Verify the response is correct by checking the text
+    response_element_imp = WebDriverWait(browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/p')),
+                message=f"Response for Impressive is not displayed"
+            )
+    assert response_element_imp.text == 'You have selected Impressive', f"Unexpected response: {response_element_imp.text}"
+    
+    # Verify the No radio button is disabled
+    radio_button_no = browser.find_element(By.XPATH, '//label[@for="noRadio"]')
+    assert 'disabled' in radio_button_no.get_attribute('class'), "No radio button is unexpectedly clickable"

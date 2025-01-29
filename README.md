@@ -24,7 +24,7 @@ Feature: DemoQA Elements Page
   Scenario: Test The Radio Button 
       Given I am on the Radio Button Elements page
       When I select the Radio Button 
-      Then I should see the corresponding message
+      Then I should see the corresponding message except for No
 	  
   Scenario: Test The Dynamic Properties 
       Given I am on the Dynamic Properties Elements page
@@ -77,4 +77,9 @@ Feature: Search in the DemoQA Bookstore
     Given I navigate to the DemoQA website bookstore
     When I create a new user
     Then I should see the user created
+```
+
+Commande pour lancer seulement un test précis
+```
+pytest tests/test_elements.py --gherkin-terminal-reporter --html=report.html -k "Test_The_Radio_Button"
 ```

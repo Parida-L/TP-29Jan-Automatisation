@@ -9,9 +9,9 @@ Feature: DemoQA Elements Page
 	  Then I should receive the corresponding status code
 
   Scenario: Test The Radio Button 
-      Given I am on the Radio Button Elements page
-      When I select the Radio Button 
-      Then I should see the corresponding message
+    Given I am on the Radio Button Elements page
+    When I select each Radio Button 
+    Then I should see the corresponding message except for No
 	  
 #   Scenario: Test The Dynamic Properties 
 #       Given I am on the Dynamic Properties Elements page
