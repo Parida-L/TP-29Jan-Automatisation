@@ -3,10 +3,10 @@ Feature: DemoQA Elements Page
   I want to interact with the Elements items 
   So that I can verify different functionality of Elements 
   
-#   Scenario: Test all API calls links 
-# 	  Given I am on the Links Elements page
-# 	  When I test all API calls links 
-# 	  Then I should receive the corresponding status code
+  Scenario: Test all API calls links 
+	  Given I am on the Links Elements page
+	  When I test all API calls links 
+	#   Then I should receive the corresponding status code
 
 #   Scenario: Test The Radio Button 
 #       Given I am on the Radio Button Elements page
