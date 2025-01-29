@@ -13,10 +13,10 @@ Feature: DemoQA Elements Page
     When I select each Radio Button 
     Then I should see the corresponding message except for No
 	  
-#   Scenario: Test The Dynamic Properties 
-#       Given I am on the Dynamic Properties Elements page
-#       When I click on the button 
-#       Then I should see the button change color
+  Scenario: Test The Dynamic Properties 
+      Given I am on the Dynamic Properties Elements page
+      When I wait 5 seconds 
+      Then the text color of the color change button changes
 
 
 

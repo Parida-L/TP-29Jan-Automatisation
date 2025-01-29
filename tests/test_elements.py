@@ -168,3 +168,45 @@ def i_should_see_the_corresponding_message_except_for_no(browser):
     # Verify the No radio button is disabled
     radio_button_no = browser.find_element(By.XPATH, '//label[@for="noRadio"]')
     assert 'disabled' in radio_button_no.get_attribute('class'), "No radio button is unexpectedly clickable"
+
+#SCENARIO 3 : DYNAMIC PROPERTIES TEST
+@scenario('features/elements.feature', 'Test The Dynamic Properties')
+def test_the_dynamic_properties():
+    pass
+
+@given('I am on the Dynamic Properties Elements page')
+def i_am_on_the_dynamic_properties_elements_page(browser):
+    #Navigate to the demoqa.com/dynamic-properties page
+    browser.get('https://demoqa.com/dynamic-properties')
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "/html/body")),
+        message="DemoQA website is not accessible"
+    )
+    #Verify we are on the correct page and scroll to the title
+    assert browser.title == "DEMOQA"
+    title_element = browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div[2]/div[2]/h1')
+    browser.execute_script("arguments[0].scrollIntoView();", title_element)
+    assert title_element.text == 'Dynamic Properties', "Header does not match"
+    
+@when('I wait 5 seconds')
+def i_wait_5_seconds(browser):
+    #Verify the button is present 
+    button = WebDriverWait(browser, 1).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="colorChange"]')),
+                message=f"Color Change button is not displayed"
+            )
+    #Scroll to the button
+    browser.execute_script("arguments[0].scrollIntoView();", button)
+    #Verify the button text color is not red
+    assert 'mt-4 btn btn-primary' in button.get_attribute('class'), "No radio button is unexpectedly clickable"
+    time.sleep(5)
+
+@then('the text color of the color change button changes')
+def the_text_color_of_the_color_change_button_changes(browser):
+    #Verify the button is still present
+    button = WebDriverWait(browser, 1).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="colorChange"]')),
+                message=f"Color Change button is not displayed"
+            )
+    #Verify the button text color is red
+    assert 'mt-4 text-danger btn btn-primary' in button.get_attribute('class'), "Color Change button text color did not change"
