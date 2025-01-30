@@ -14,5 +14,5 @@ Feature: DemoQA Widgets Page
     And I select "Option 2" in the "Select one" dropdown
     And I select "Option 3" in "Old Style Select Menu" dropdown
     And I select all options in "Multi Select Drop Down" dropdown
-    # And I select "Option 4" in "Standard multi select"
-    # Then the selected values should be displayed
+    And I select "Option 4" in "Standard multi select"
+    Then the selected values should be displayed

@@ -142,15 +142,15 @@ def select_menu(browser):
 
 @when('I select "Option 1" in the "Select value" dropdown')
 def select_another_root_option(browser):
+    # Select the "Select value" dropdown
     select_value_dropdown_locator = (By.XPATH, "//*[@id='withOptGroup']/div/div[1]")
     select_value_dropdown = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(select_value_dropdown_locator),
         message="Select value dropdown is not found on the page"
     )
-    time.sleep(1)
     select_value_dropdown.click()
-
     time.sleep(1)
+    # Select the Option 1 (Another root option) from the dropdown
     another_root_option_locator = (By.ID, "react-select-2-option-3")  
     another_root_option = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(another_root_option_locator),
@@ -163,6 +163,7 @@ def select_another_root_option(browser):
 
 @when('I select "Option 2" in the "Select one" dropdown')
 def select_other_option(browser):
+    # Select the "Select one" dropdown
     select_one_dropdown_locator = (By.XPATH, '//*[@id="selectOne"]/div/div[1]')
     select_one_dropdown = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(select_one_dropdown_locator),
@@ -171,6 +172,7 @@ def select_other_option(browser):
     time.sleep(1)
     select_one_dropdown.click()
     time.sleep(1)
+    # Select the Option 2 (Other) from the dropdown
     other_option_locator = (By.XPATH, '//div[@id="selectOne"]/div[2]/div/div/div[2]/div[6]')  
     other_option = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(other_option_locator),
@@ -181,6 +183,7 @@ def select_other_option(browser):
 
 @when('I select "Option 3" in "Old Style Select Menu" dropdown')
 def select_aqua_option(browser):
+    # Select the "Old Style Select Menu" dropdown
     old_style_select_menu_locator = (By.ID, "oldSelectMenu")
     old_style_select_menu = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(old_style_select_menu_locator),
@@ -205,12 +208,12 @@ def select_all_colors_option(browser):
     
     # List of options to select (Red, Black, Green, Blue)
     color_options = {
+        "Blue": "react-select-4-option-0",
+        "Green": "react-select-4-option-1",
         "Red": "react-select-4-option-2",
         "Black": "react-select-4-option-3",
-        "Green": "react-select-4-option-1",
-        "Blue": "react-select-4-option-4"
     }
-
+    # Select each color option from the dropdown
     for color, option_id in color_options.items():
         option_locator = (By.ID, option_id)
         option = WebDriverWait(browser, 10).until(
@@ -220,22 +223,21 @@ def select_all_colors_option(browser):
         time.sleep(1)  # Delay to prevent issues with dropdown closing
         option.click()
 
-# @when('I select "Option 4" in "Standard multi select"')
-# def select_option_4(browser):
-#     standard_multi_select_locator = (By.XPATH, '//*[@id="cars"]/div/div[1]')
-#     standard_multi_select = WebDriverWait(browser, 10).until(
-#         EC.element_to_be_clickable(standard_multi_select_locator),
-#         message="Standard multi select is not found on the page"
-#     )
-#     time.sleep(1)
-#     standard_multi_select.click()
-#     option_4_locator = (By.ID, "react-select-5-option-3")  
-#     option_4 = WebDriverWait(browser, 10).until(
-#         EC.element_to_be_clickable(option_4_locator),
-#         message="Option 4 is not found in the dropdown"
-#     )
-#     time.sleep(1)
-#     option_4.click()
+@when('I select "Option 4" in "Standard multi select"')
+def select_option_4(browser):
+    #Verify the standard multi select dropdown is accessible
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="cars"]')),
+        message="Standard multi select is not found on the page"
+    )
+    # Select the Option 4 from the selection list
+    option_4_locator = (By.XPATH, "//*[@id='cars']/option[4]")  
+    option_4 = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable(option_4_locator),
+        message="Option 4 is not found in the dropdown"
+    )
+    time.sleep(1)
+    option_4.click()
 
 @then('the selected values should be displayed')
 def verify_selected_values(browser):
@@ -254,8 +256,12 @@ def verify_selected_values(browser):
     selected_option = select_menu.first_selected_option
     assert selected_option.text == "Aqua", f"Expected selected value to be 'Aqua', but got '{selected_option.text}'"
 
-    # #Verify Multi Select Drop Down
-    multi_select_dropdown_selected_black = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[1]/div/div[1]')
+    # #Verify Multi Select Drop Down for each colors 
+    multi_select_dropdown_selected_blue = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[2]/div/div[1]')
+    assert multi_select_dropdown_selected_blue.text == "Blue", f"Expected selected value to be 'Blue', but got '{multi_select_dropdown_selected_blue.text}'"
+    multi_select_dropdown_selected_black = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[3]/div/div[1]')
     assert multi_select_dropdown_selected_black.text == "Black", f"Expected selected value to be 'Black', but got '{multi_select_dropdown_selected_black.text}'"
-    multi_select_dropdown_selected_red = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[2]/div/div[1]')
+    multi_select_dropdown_selected_red = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[4]/div/div[1]')
     assert multi_select_dropdown_selected_red.text == "Red", f"Expected selected value to be 'Red', but got '{multi_select_dropdown_selected_red.text}'"
+    multi_select_dropdown_selected_green = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[1]/div/div[1]')
+    assert multi_select_dropdown_selected_green.text == "Green", f"Expected selected value to be 'Green', but got '{multi_select_dropdown_selected_green.text}'"
