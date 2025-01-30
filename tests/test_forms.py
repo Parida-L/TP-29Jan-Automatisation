@@ -83,12 +83,38 @@ def fill_form(browser):
     )
     # click the submit button
     submit_button.click()
+    time.sleep(2)
 
 @then('I have confirmation of registration')
 def form_submitted(browser):
-    #Verify the form is submitted
+    # Wait for the confirmation message to appear
     confirmation = WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="example-modal-sizes-title-lg"]')),
         message="Form was not submitted"
     )
-    assert browser.find_element(confirmation).text == 'Thanks for submitting the form', "Form was not submitted"
+
+    # Assert that the confirmation text is correct
+    assert confirmation.text == 'Thanks for submitting the form', "Form was not submitted"
+
+    # Wait for the table inside the modal
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@class="table-responsive"]')),
+        message="Recap table did not appear"
+    )
+
+    # Assert that the submitted values appear in the table
+    recap_data = {
+        "Student Name": "John J",
+        "Student Email": "john@j.com",
+        "Gender": "Male",
+        "Mobile": "1234567890"
+    }
+
+    # Check that the recap data in the modal matches the submitted values
+    for key, expected_value in recap_data.items():
+        cell_xpath = f"//td[contains(text(), '{key}')]/following-sibling::td"
+        actual_value = WebDriverWait(browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, cell_xpath))
+        ).text
+        # Assert that the actual value matches the expected value
+        assert actual_value == expected_value, f"Expected {key} to be '{expected_value}', but got '{actual_value}'"

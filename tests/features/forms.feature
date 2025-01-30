@@ -6,5 +6,5 @@ Feature: DemoQA Forms Page
   Scenario: Test the Practice Form
     Given I am on the Practice Form Page
     When I fill in the form 
-    # Then I have confirmation of registration 
+    Then I have confirmation of registration 
 	  
