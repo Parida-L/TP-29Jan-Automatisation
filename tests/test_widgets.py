@@ -256,12 +256,15 @@ def verify_selected_values(browser):
     selected_option = select_menu.first_selected_option
     assert selected_option.text == "Aqua", f"Expected selected value to be 'Aqua', but got '{selected_option.text}'"
 
-    # #Verify Multi Select Drop Down for each colors 
-    multi_select_dropdown_selected_blue = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[2]/div/div[1]')
-    assert multi_select_dropdown_selected_blue.text == "Blue", f"Expected selected value to be 'Blue', but got '{multi_select_dropdown_selected_blue.text}'"
-    multi_select_dropdown_selected_black = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[3]/div/div[1]')
-    assert multi_select_dropdown_selected_black.text == "Black", f"Expected selected value to be 'Black', but got '{multi_select_dropdown_selected_black.text}'"
-    multi_select_dropdown_selected_red = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[4]/div/div[1]')
-    assert multi_select_dropdown_selected_red.text == "Red", f"Expected selected value to be 'Red', but got '{multi_select_dropdown_selected_red.text}'"
-    multi_select_dropdown_selected_green = browser.find_element(By.XPATH, '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[1]/div/div[1]')
-    assert multi_select_dropdown_selected_green.text == "Green", f"Expected selected value to be 'Green', but got '{multi_select_dropdown_selected_green.text}'"
+    # Dictionary of selected colors with their corresponding XPATHs
+    selected_colors = {
+        "Blue": '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[2]/div/div[1]',
+        "Black": '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[3]/div/div[1]',
+        "Red": '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[4]/div/div[1]',
+        "Green": '//*[@id="selectMenuContainer"]/div[7]/div/div/div/div[1]/div[1]/div/div[1]'
+    }
+    # Loop through each color in the multi-select dropdown
+    for color, xpath in selected_colors.items():
+        element = browser.find_element(By.XPATH, xpath)
+        # Assert that the selected text matches the expected color
+        assert element.text == color, f"❌ ERROR: Expected '{color}',but got'{element.text}'"
